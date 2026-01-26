@@ -1,0 +1,39 @@
+# extract.py
+"""This file calls 'globals.py'."""
+from pkg.globals import *
+
+
+def get_file_paths(table_name: str, root_path: Path) -> Optional[Path]:
+    """Obtain the full path and file extension."""
+    file_path_csv = root_path / f"{table_name}.csv"
+    file_path_txt = root_path / f"{table_name}.txt"
+    if file_path_csv.exists():
+        return file_path_csv
+    if file_path_txt.exists():
+        return file_path_txt
+    return None
+
+
+def extract_from_file(table_name: str, root_path: Path) -> pl.DataFrame:
+    """Read files and construct DataFrames."""
+    file_path = get_file_paths(table_name, root_path)
+    if not file_path:
+        raise FileNotFoundError(
+            f"No se encontró el archivo para '{table_name}'.")
+
+    delimiter = '\t' if table_name in delimiter_tab else '|'
+    quote_char = '"' if table_name in quote_char_double_quotes else None
+
+    df = pl.scan_csv(
+        file_path,
+        separator=delimiter,
+        quote_char=quote_char,
+        has_header=True,
+        encoding="utf8-lossy",      # Avoid errors caused by unusual characters
+        ignore_errors=True,         # Useful if there are damaged rows
+        # low_memory=True,          # Reduce RAM usage
+        infer_schema_length=0,
+        rechunk=False
+        # Avoid sorting data in memory if you are only going to process and save it
+    )
+    return df
