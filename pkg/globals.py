@@ -9,18 +9,15 @@ from typing import Dict, List, Optional, Any
 ROOT_DATA_PATH = Path(
     r"D:\caarteaga\Documents\TABLAS")
 
-TABLES_TO_PROCESS: List[str] = [
-    'CFDI_2024',
+TABLES_TO_PROCESS = [
+    'GERG_AECF_1891_Anexo1A-QA',
 ]
 
-# Tables with '"' inside the cells
-quote_char_double_quotes = []
+BATCH_SIZE = 50000
 
-# Tables with ',' as delimiter
-delimiter_comma = []
 
 # Tables with '\t' as delimiter
-delimiter_tab = ['CFDI_2024']
+delimiter_tab = ['GERG_AECF_1891_Anexo1A-QA']
 
 # Columns to be dropped
 col_drop = []
