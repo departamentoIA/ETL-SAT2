@@ -34,7 +34,7 @@ def etl_for_batch(table_name: str, ROOT_DATA_PATH: str) -> None:
             index_load_table(df, f'{table_name}_clean')
             """
 
-    print("ETL Finalizado con éxito.")
+    print("Tabla '{table_name}' procesada con éxito.")
 
 
 def main():
@@ -45,7 +45,7 @@ def main():
         print("=" * 25)
         try:
             get_df_sample(table_name, ROOT_DATA_PATH)
-            etl_for_batch(table_name, ROOT_DATA_PATH)
+            # etl_for_batch(table_name, ROOT_DATA_PATH)
 
         except Exception as e:
             print(

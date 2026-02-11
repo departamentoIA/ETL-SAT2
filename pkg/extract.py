@@ -55,4 +55,12 @@ def get_df_sample(table_name: str, root_path: Path) -> None:
         low_memory=True,            # Reduce RAM usage
         n_rows=1000
     )
-    df.write_excel(f'{table_name}_sample_raw.xlsx')
+
+    try:
+        df.write_excel(f'{table_name}_sample_raw.xlsx')
+        print(f"La muestra de la tabla '{table_name}' se guardó exitosamente.")
+        print(df.schema)
+    except Exception as e:
+        print(
+            f"\nNo puedo escribir si el archivo está abierto")
+        print(f"'{e}'")

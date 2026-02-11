@@ -10,10 +10,10 @@ ROOT_DATA_PATH = Path(
     r"D:\caarteaga\Documents\TABLAS")
 
 TABLES_TO_PROCESS = [
-    'GERG_AECF_1891_Anexo1A-QA',
+    'AECF_1891_Anexo1A-QA',
 ]
 
-BATCH_SIZE = 50000
+BATCH_SIZE = 10000
 
 
 # Tables with '\t' as delimiter
@@ -23,14 +23,29 @@ delimiter_tab = ['GERG_AECF_1891_Anexo1A-QA']
 col_drop = []
 
 # Columns 'Int32' type for all tables
-col_int32 = [
-]
+col_int32 = ['FormaPago', 'EmisorRegimenFiscal',
+             ]
+
+# Columns 'Int64' type for all tables
+col_int64 = ['NoCertificado', 'LugarExpedicion',
+             ]
 
 # Columns 'Int8' type for all tables
 col_int8 = []
 
 # Columns 'DATE' type for all tables
-col_date = []
+col_date = ['FechaEmision', 'FechaCertificacion', 'FechaCancelacion']
 
 # String Columns to be converted to string, to be clean and to be converted to uppercase
-col_str = []
+col_str = ['UUID', 'Moneda', 'TipoDeComprobante', 'EmisorRFC', 'ReceptorRFC', 'Serie',
+           'Folio', 'CondicionesDePago', 'MetodoPago', 'ReceptorNombre', 'EmisorNombre',
+           ]
+
+# Columns 'Float64' type for all tables
+col_float = ['Descuento', 'SubTotal', 'Total', 'TrasladosIVA', 'TrasladosIEPS',
+             'TotalImpuestosTrasladados', 'RetenidosIVA', 'RetenidosISR',
+             'TotalImpuestosRetenidos', 'TipoCambio',
+             ]
+
+# Columns to be encoded manually
+col_encode = ['EmisorRFC', 'ReceptorRFC']
