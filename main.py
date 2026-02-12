@@ -2,10 +2,7 @@
 
 from pkg.extract import *
 from pkg.transform import *
-import warnings
-
-# To ignore all warnings
-warnings.filterwarnings("ignore")
+from pkg.load import *
 
 
 def etl_for_batch(table_name: str, ROOT_DATA_PATH: str) -> None:
@@ -20,21 +17,19 @@ def etl_for_batch(table_name: str, ROOT_DATA_PATH: str) -> None:
 
         for df_batch in batches:
             batch_count += 1
-            print(
-                f"Procesando lote {batch_count}, filas: {df_batch.shape[0]}")
+            print(f"\nProcesando lote {batch_count}...")
 
-            """
             # 2. Transformation (T)
-            df_trans = transform(df)
-            df_sample = df_trans.sample(1000, seed=42)
-            try_write_excel(df_sample, f'{table_name}_clean.xlsx')
+            df_trans = transform(df_batch)
+            if batch_count == 1:
+                print(
+                    f"DataFrame con {df_trans.shape[0]} filas y {df_trans.shape[1]} columnas")
+                print(df_trans.schema)
 
             # 3. Load to SQL Server (L)
-            df = df.head(10)
-            index_load_table(df, f'{table_name}_clean')
-            """
+            load_table(df_trans, f'{table_name}', batch_count)
 
-    print("Tabla '{table_name}' procesada con éxito.")
+    print(f"Tabla: '{table_name}' procesada con éxito.")
 
 
 def main():
@@ -44,8 +39,8 @@ def main():
         print(f"| 📊 Procesando Tabla: {table_name}")
         print("=" * 25)
         try:
-            get_df_sample(table_name, ROOT_DATA_PATH)
-            # etl_for_batch(table_name, ROOT_DATA_PATH)
+            # get_df_sample(table_name, ROOT_DATA_PATH)
+            etl_for_batch(table_name, ROOT_DATA_PATH)
 
         except Exception as e:
             print(

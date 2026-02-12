@@ -1,7 +1,7 @@
 # transform.py
 """This file calls 'globals.py' and 'config.py'."""
 from pkg.globals import *
-from typing import Iterable
+from typing import Iterable, Mapping
 
 
 def drop_columns(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
@@ -39,7 +39,7 @@ def parse_datetime_columns(df: pl.DataFrame, columns: Iterable[str],
 
 
 def to_cleaned_str(df: pl.DataFrame, columns: Iterable[str]) -> pl.DataFrame:
-    """Convert to string, clean data and convert to uppercase."""
+    """Clean data and convert to uppercase."""
     return df.with_columns(
         [
             pl.col(col).str.strip_chars().str.to_uppercase().alias(col)
@@ -49,13 +49,46 @@ def to_cleaned_str(df: pl.DataFrame, columns: Iterable[str]) -> pl.DataFrame:
     )
 
 
+def _build_expr(col_name: str, mapeo: Mapping[str, str]) -> pl.Expr:
+    """
+    Construye la expresión de limpieza para una columna:
+      - Cast a string
+      - Uppercase
+      - Reemplazos definidos en `mapeo` (literalmente)
+      - Reemplazar ? \" * por espacio, colapsar espacios y strip
+    """
+    expr = pl.col(col_name).cast(pl.Utf8).str.to_uppercase()
+
+    # Reemplazos del mapeo (literal=True para evitar interpretar regex)
+    for roto, real in mapeo.items():
+        expr = expr.str.replace_all(roto, real, literal=True)
+
+    # Limpieza adicional
+    expr = (
+        expr
+        .str.replace_all(r'[?\\"*]', " ")   # ? \" * -> espacio
+        .str.replace_all(r"\s+", " ")       # colapsar espacios
+        .str.strip_chars()                  # quitar espacios al inicio/fin
+    )
+
+    return expr.alias(col_name)
+
+
+def manual_encoding(df: pl.DataFrame, cols: Iterable[str], mapeo: Mapping[str, str]) -> pl.DataFrame:
+    """Apply manual encoding to the correspondig columns."""
+    cols_existentes = [c for c in cols if c in df.columns]
+    if not cols_existentes:
+        return df
+
+    exprs = [_build_expr(c, mapeo) for c in cols_existentes]
+    return df.with_columns(exprs)
+
+
 def transform(df: pl.DataFrame) -> pl.DataFrame:
-    """Drop some columns, apply cast and formating to the DataFrames."""
-    df = drop_columns(df, col_drop)
+    """Apply cast and formating to the DataFrames."""
     df = cast_columns(df, col_int32, pl.Int32)
     df = cast_columns(df, col_int8, pl.Int8)
     df = parse_datetime_columns(df, col_date)
     df = to_cleaned_str(df, col_str)
-    print(f"DataFrame con {df.shape[0]} filas y {df.shape[1]} columnas")
-    print(df.schema)
+    # df = manual_encoding(df, col_encode, mapeo)
     return df
