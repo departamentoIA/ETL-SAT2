@@ -15,12 +15,8 @@ TABLES_TO_PROCESS = [
 
 BATCH_SIZE = 50000
 
-
 # Tables with '\t' as delimiter
 delimiter_tab = ['ejemplo1']
-
-# Columns to be dropped
-col_drop = []
 
 # Columns 'Int32' type for all tables
 col_int32 = ['FormaPago', 'EmisorRegimenFiscal',
@@ -48,7 +44,7 @@ col_float = ['Descuento', 'SubTotal', 'Total', 'TrasladosIVA', 'TrasladosIEPS',
              ]
 
 # Columns to be encoded manually
-col_encode = ['EmisorRFC', 'ReceptorRFC']
+col_encode = ['EmisorRFC', 'EmisorNombre', 'ReceptorRFC', 'ReceptorNombre']
 
 mapeo = {
     'Ã‘': 'Ñ', 'Ã±': 'Ñ', 'ÃƑ': 'Ñ',

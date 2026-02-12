@@ -1,7 +1,6 @@
 # extract.py
 """This file calls 'globals.py'."""
 from pkg.globals import *
-import os
 
 
 def get_file_paths(table_name: str, root_path: Path) -> Optional[Path]:

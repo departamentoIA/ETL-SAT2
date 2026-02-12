@@ -61,12 +61,12 @@ def _build_expr(col_name: str, mapeo: Mapping[str, str]) -> pl.Expr:
 
     # Reemplazos del mapeo (literal=True para evitar interpretar regex)
     for roto, real in mapeo.items():
-        expr = expr.str.replace_all(roto, real, literal=True)
+        expr = expr.str.replace_all(roto, real)
 
     # Limpieza adicional
     expr = (
         expr
-        .str.replace_all(r'[?\\"*]', " ")   # ? \" * -> espacio
+        .str.replace_all(r'[?\\"*,:;.]', " ")   # ? \" * -> espacio
         .str.replace_all(r"\s+", " ")       # colapsar espacios
         .str.strip_chars()                  # quitar espacios al inicio/fin
     )
@@ -86,9 +86,11 @@ def manual_encoding(df: pl.DataFrame, cols: Iterable[str], mapeo: Mapping[str, s
 
 def transform(df: pl.DataFrame) -> pl.DataFrame:
     """Apply cast and formating to the DataFrames."""
+    df = cast_columns(df, col_int64, pl.Int64)
     df = cast_columns(df, col_int32, pl.Int32)
     df = cast_columns(df, col_int8, pl.Int8)
+    df = cast_columns(df, col_float, pl.Float64)
     df = parse_datetime_columns(df, col_date)
     df = to_cleaned_str(df, col_str)
-    # df = manual_encoding(df, col_encode, mapeo)
+    df = manual_encoding(df, col_encode, mapeo)
     return df

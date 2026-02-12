@@ -21,7 +21,6 @@ def load_table(df: pl.DataFrame, table_name: str, batch_count: int) -> None:
             connection=engine,
             if_table_exists=create_table    # If the tabla already exists, it fails
         )
-        print(f"✓ Datos subidos exitosamente a {table_name}")
 
     except Exception as e:
         print(f"❌ Error: {e}")
