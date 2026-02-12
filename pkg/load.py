@@ -15,11 +15,10 @@ def load_table(df: pl.DataFrame, table_name: str, batch_count: int) -> None:
     if batch_count == 1:
         create_table = "replace"
     try:
-        # Polars detectará el motor de SQLAlchemy automáticamente
         df.write_database(
             table_name=table_name,
             connection=engine,
-            if_table_exists=create_table    # If the tabla already exists, it fails
+            if_table_exists=create_table
         )
 
     except Exception as e:

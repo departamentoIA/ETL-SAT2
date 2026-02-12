@@ -3,6 +3,7 @@
 from pkg.extract import *
 from pkg.transform import *
 from pkg.load import *
+import time
 
 
 def etl_for_batch(table_name: str, ROOT_DATA_PATH: str) -> None:
@@ -18,7 +19,7 @@ def etl_for_batch(table_name: str, ROOT_DATA_PATH: str) -> None:
         for df_batch in batches:
             batch_count += 1
             print(f"\nProcesando lote {batch_count}...")
-
+            inicio = time.perf_counter()
             # 2. Transformation (T)
             df_trans = transform(df_batch)
             if batch_count == 1:
@@ -27,7 +28,9 @@ def etl_for_batch(table_name: str, ROOT_DATA_PATH: str) -> None:
                 print(df_trans.schema)
 
             # 3. Load to SQL Server (L)
-            load_table(df_trans, f'{table_name}', batch_count)
+            # load_table(df_trans, f'{table_name}', batch_count)
+            fin = time.perf_counter()
+            print(f"Tiempo en procesar este lote: {fin - inicio:.4f} s")
 
     print(f"Tabla: '{table_name}' procesada con éxito.")
 

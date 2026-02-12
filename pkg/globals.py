@@ -13,10 +13,7 @@ TABLES_TO_PROCESS = [
     'ejemplo1',
 ]
 
-BATCH_SIZE = 50000
-
-# Tables with '\t' as delimiter
-delimiter_tab = ['ejemplo1']
+BATCH_SIZE = 100_000
 
 # Columns 'Int32' type for all tables
 col_int32 = ['FormaPago', 'EmisorRegimenFiscal',

@@ -21,11 +21,9 @@ def extract_from_batch(table_name: str, root_path: Path) -> pl.DataFrame:
         raise FileNotFoundError(
             f"No se encontró el archivo para '{table_name}'.")
 
-    delimiter = '\t' if table_name in delimiter_tab else '|'
-
     df = pl.read_csv_batched(
         file_path,
-        separator=delimiter,
+        separator='|',
         has_header=True,
         encoding="cp1252",
         ignore_errors=True,         # Useful if there are damaged rows
@@ -43,11 +41,9 @@ def get_df_sample(table_name: str, root_path: Path) -> None:
         raise FileNotFoundError(
             f"No se encontró el archivo para '{table_name}'.")
 
-    delimiter = '\t' if table_name in delimiter_tab else '|'
-
     df = pl.read_csv(
         file_path,
-        separator=delimiter,
+        separator='|',
         has_header=True,
         encoding="utf8-lossy",      # Avoid errors caused by unusual characters
         ignore_errors=True,         # Useful if there are damaged rows
