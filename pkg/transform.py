@@ -84,7 +84,15 @@ def manual_encoding(df: pl.DataFrame, cols: Iterable[str], mapeo: Mapping[str, s
     return df.with_columns(exprs)
 
 
-def transform(df: pl.DataFrame) -> pl.DataFrame:
+def adding_cols(table_name: str, df: pl.DataFrame) -> pl.DataFrame:
+    """Add columns if applicable."""
+    if table_name == 'GERG_AECF_1891_Anexo1A-QA':
+        return df
+    else:
+        return df
+
+
+def transform(table_name: str, df: pl.DataFrame) -> pl.DataFrame:
     """Apply cast and formating to the DataFrames."""
     df = cast_columns(df, col_int64, pl.Int64)
     df = cast_columns(df, col_int32, pl.Int32)
@@ -93,4 +101,6 @@ def transform(df: pl.DataFrame) -> pl.DataFrame:
     df = parse_datetime_columns(df, col_date)
     df = to_cleaned_str(df, col_str)
     df = manual_encoding(df, col_encode, mapeo)
+    if table_name in TABLES_TO_ADD_COLS:
+        df = adding_cols(table_name, df)
     return df

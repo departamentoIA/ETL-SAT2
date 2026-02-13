@@ -7,13 +7,15 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 
 ROOT_DATA_PATH = Path(
-    r"D:\caarteaga\Documents\TABLAS")
+    r"\\sia\AECF\DGATIC\LOTA\Bases de Datos\SAT")
+
+BATCH_SIZE = 50_000
 
 TABLES_TO_PROCESS = [
-    'ejemplo1',
+    'GERG_AECF_1891_Anexo1A-QA',
 ]
 
-BATCH_SIZE = 100_000
+TABLES_TO_ADD_COLS = ['GERG_AECF_1891_Anexo1A-QA']
 
 # Columns 'Int32' type for all tables
 col_int32 = ['FormaPago', 'EmisorRegimenFiscal',

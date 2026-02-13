@@ -25,7 +25,7 @@ def extract_from_batch(table_name: str, root_path: Path) -> pl.DataFrame:
         file_path,
         separator='|',
         has_header=True,
-        encoding="cp1252",
+        encoding="utf8-lossy",
         ignore_errors=True,         # Useful if there are damaged rows
         truncate_ragged_lines=True,
         infer_schema_length=0,
