@@ -4,12 +4,6 @@ from pkg.globals import *
 from typing import Iterable, Mapping
 
 
-def drop_columns(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
-    """Drop some columns."""
-    colums = [c for c in cols if c in df.columns]
-    return df.drop(colums)
-
-
 def cast_columns(df: pl.DataFrame, columns: Iterable[str], dtype: pl.DataType
                  ) -> pl.DataFrame:
     """Cast the specified columns to the specified type.
@@ -84,10 +78,25 @@ def manual_encoding(df: pl.DataFrame, cols: Iterable[str], mapeo: Mapping[str, s
     return df.with_columns(exprs)
 
 
+def anexo1a(df: pl.DataFrame) -> pl.DataFrame:
+    """Add columns to Table 'A_Facturas'."""
+    path_cat = r"\\sia\AECF\DGATIC\LOTA\Bases de Datos\CATALOGOS\CatalogoAPF_2026.xlsx"
+    catalogoAPF = pl.read_excel(path_cat)
+    return df.with_columns([
+        pl.col("ReceptorRFC")
+        .is_in(catalogoAPF["RFC"])
+        .alias("ReceptorEnCatalogoAPF"),
+
+        pl.col("EmisorRFC")
+        .is_in(catalogoAPF["RFC"])
+        .alias("EmisorEnCatalogoAPF")
+    ])
+
+
 def adding_cols(table_name: str, df: pl.DataFrame) -> pl.DataFrame:
     """Add columns if applicable."""
     if table_name == 'GERG_AECF_1891_Anexo1A-QA':
-        return df
+        return anexo1a(df)
     else:
         return df
 

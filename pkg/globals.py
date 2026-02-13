@@ -9,7 +9,8 @@ from typing import Dict, List, Optional, Any
 ROOT_DATA_PATH = Path(
     r"\\sia\AECF\DGATIC\LOTA\Bases de Datos\SAT")
 
-BATCH_SIZE = 50_000
+BATCH_SIZE = 100_000
+CATALOGO_APF = 'CatalogoAPF_2026.xlsx'
 
 TABLES_TO_PROCESS = [
     'GERG_AECF_1891_Anexo1A-QA',

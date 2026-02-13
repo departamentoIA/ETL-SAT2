@@ -24,15 +24,14 @@ def etl_for_batch(table_name: str, ROOT_DATA_PATH: str) -> None:
             # 2. Transformation (T)
             df_trans = transform(table_name, df_batch)
             if batch_count == 1:
-                print(
-                    f"DataFrame con {df_trans.shape[0]} filas y {df_trans.shape[1]} columnas")
+                print(f"Dimensiones del DataFrame: {df_trans.shape}")
                 print(df_trans.schema)
                 df_trans.write_excel(f'{table_name}_first_rows.xlsx')
             # 3. Load to SQL Server (L)
-            # load_table(df_trans, f'{table_name}', batch_count)
+            load_table(df_trans, f'{table_name}', batch_count)
             fin = time.perf_counter()
-            print(f"Tiempo procesando este lote: {fin - inicio:.4f} s")
-            if batch_count > 3:
+            print(f"Tiempo procesando lote: {fin - inicio:.4f} s")
+            if batch_count > 5:
                 return
 
     print(f"\nTabla: '{table_name}' procesada con éxito.")
